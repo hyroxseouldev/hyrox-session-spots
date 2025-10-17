@@ -27,6 +27,8 @@ export async function getAllHyroxBoxes(params?: {
       contactInfo: hyroxbox.contactInfo,
       instagramId: hyroxbox.instagramId,
       price: hyroxbox.price,
+      nonMemberPrice: hyroxbox.nonMemberPrice,
+      popularity: hyroxbox.popularity,
       features: hyroxbox.features,
       naverMapUrl: hyroxbox.naverMapUrl,
       regionId: hyroxbox.regionId,
@@ -36,7 +38,7 @@ export async function getAllHyroxBoxes(params?: {
     })
     .from(hyroxbox)
     .leftJoin(regions, eq(hyroxbox.regionId, regions.id))
-    .orderBy(desc(hyroxbox.createdAt))
+    .orderBy(desc(hyroxbox.popularity))
     .$dynamic();
 
   if (regionId) {
@@ -68,6 +70,8 @@ export async function getHyroxBoxById(id: number) {
       contactInfo: hyroxbox.contactInfo,
       instagramId: hyroxbox.instagramId,
       price: hyroxbox.price,
+      nonMemberPrice: hyroxbox.nonMemberPrice,
+      popularity: hyroxbox.popularity,
       features: hyroxbox.features,
       naverMapUrl: hyroxbox.naverMapUrl,
       regionId: hyroxbox.regionId,

@@ -39,6 +39,8 @@ export default function HyroxBoxPage() {
     contactInfo: "",
     instagramId: "",
     price: "",
+    nonMemberPrice: "",
+    popularity: "",
     features: "",
     naverMapUrl: "",
     regionId: "",
@@ -74,6 +76,8 @@ export default function HyroxBoxPage() {
       contactInfo: "",
       instagramId: "",
       price: "",
+      nonMemberPrice: "",
+      popularity: "0",
       features: "",
       naverMapUrl: "",
       regionId: "",
@@ -91,6 +95,8 @@ export default function HyroxBoxPage() {
       contactInfo: box.contactInfo || "",
       instagramId: box.instagramId || "",
       price: box.price?.toString() || "",
+      nonMemberPrice: box.nonMemberPrice?.toString() || "",
+      popularity: box.popularity?.toString() || "0",
       features: box.features || "",
       naverMapUrl: box.naverMapUrl || "",
       regionId: box.regionId.toString(),
@@ -116,6 +122,8 @@ export default function HyroxBoxPage() {
         contactInfo: formData.contactInfo || null,
         instagramId: formData.instagramId || null,
         price: formData.price ? parseInt(formData.price) : null,
+        nonMemberPrice: formData.nonMemberPrice ? parseInt(formData.nonMemberPrice) : null,
+        popularity: formData.popularity ? parseInt(formData.popularity) : 0,
         features: formData.features || null,
         naverMapUrl: formData.naverMapUrl || null,
         regionId: parseInt(formData.regionId),
@@ -353,13 +361,43 @@ export default function HyroxBoxPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                가격 (원)
+                회원 가격 (원)
               </label>
               <input
                 type="number"
                 value={formData.price}
                 onChange={(e) =>
                   setFormData({ ...formData, price: e.target.value })
+                }
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                비회원 가격 (원)
+              </label>
+              <input
+                type="number"
+                value={formData.nonMemberPrice}
+                onChange={(e) =>
+                  setFormData({ ...formData, nonMemberPrice: e.target.value })
+                }
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                인기도 (숫자가 높을수록 우선 표시)
+              </label>
+              <input
+                type="number"
+                value={formData.popularity}
+                onChange={(e) =>
+                  setFormData({ ...formData, popularity: e.target.value })
                 }
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               />

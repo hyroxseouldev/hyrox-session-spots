@@ -26,7 +26,9 @@ export const hyroxbox = pgTable("hyroxbox", {
   address: text("address"), // 주소
   contactInfo: varchar("contact_info", { length: 100 }), // 연락처 정보
   instagramId: varchar("instagram_id", { length: 255 }), // 인스타 아이디
-  price: integer("price"), // 가격 (원 단위)
+  price: integer("price"), // 회원 가격 (원 단위)
+  nonMemberPrice: integer("non_member_price"), // 비회원 가격 (원 단위)
+  popularity: integer("popularity").default(0).notNull(), // 인기도 (높을수록 인기)
   features: text("features"), // 특징 (예: "피트니스, 요가")
   naverMapUrl: varchar("naver_map_url", { length: 512 }), // 네이버 맵 주소
   regionId: integer("region_id")
