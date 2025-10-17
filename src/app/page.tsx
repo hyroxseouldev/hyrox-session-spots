@@ -1,16 +1,22 @@
 import { Suspense } from "react";
 import { getAllHyroxBoxes } from "@/db/actions/hyroxbox";
-import { getAllRegions } from "@/db/actions/region";
+import { getRegionsWithCount } from "@/db/actions/region";
 import { HyroxBoxCard } from "@/components/hyroxbox-card";
 import { HyroxBoxSkeleton } from "@/components/hyroxbox-skeleton";
 import { Search, Filter } from "lucide-react";
 import { MainPageClient } from "./main-page-client";
 import { Hero } from "@/components/ui/animated-hero";
+import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
+import { PaginationControls } from "@/components/ui/pagination-controls";
 
 type SearchParams = Promise<{
-  region?: string;
+  regions?: string;
   search?: string;
+  page?: string;
 }>;
+
+const ITEMS_PER_PAGE = 8;
 
 export default async function HomePage({
   searchParams,
@@ -18,21 +24,47 @@ export default async function HomePage({
   searchParams: SearchParams;
 }) {
   const params = await searchParams;
-  const regionId = params.region ? Number(params.region) : undefined;
+  const regionIds = params.regions
+    ? params.regions.split(",").map(Number).filter(Boolean)
+    : undefined;
   const search = params.search || undefined;
+  const currentPage = params.page ? Number(params.page) : 1;
 
   // Fetch data with SSR
-  const [hyroxboxes, regions] = await Promise.all([
-    getAllHyroxBoxes({ regionId, search }),
-    getAllRegions(),
-  ]);
+  const regions = await getRegionsWithCount();
+
+  // Fetch all boxes for filtering and pagination
+  let allHyroxboxes = [];
+  if (regionIds && regionIds.length > 0) {
+    // Fetch boxes for each region and combine
+    const boxPromises = regionIds.map((regionId) =>
+      getAllHyroxBoxes({ regionId, search })
+    );
+    const boxResults = await Promise.all(boxPromises);
+    // Flatten and deduplicate by id
+    const boxMap = new Map();
+    boxResults.flat().forEach((box) => boxMap.set(box.id, box));
+    allHyroxboxes = Array.from(boxMap.values());
+  } else {
+    // Fetch all boxes if no region filter
+    allHyroxboxes = await getAllHyroxBoxes({ search });
+  }
+
+  // Pagination
+  const totalItems = allHyroxboxes.length;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const hyroxboxes = allHyroxboxes.slice(startIndex, endIndex);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* <Hero /> */}
+    <>
+      <Header />
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        {/* <Hero /> */}
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-6">
+        {/* Main Content */}
+        <div className="container mx-auto px-4 py-6">
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar */}
           <aside className="w-full lg:w-80 flex-shrink-0">
@@ -44,7 +76,7 @@ export default async function HomePage({
 
               <MainPageClient
                 regions={regions}
-                initialRegionId={regionId}
+                initialRegionIds={regionIds}
                 initialSearch={search}
               />
 
@@ -88,24 +120,36 @@ export default async function HomePage({
                       검색 결과가 없습니다
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400 max-w-md">
-                      {regionId
+                      {regionIds && regionIds.length > 0
                         ? "선택한 지역에 등록된 HyroxBox가 없습니다."
                         : "검색 조건과 일치하는 HyroxBox가 없습니다."}
                     </p>
                   </div>
                 </div>
               ) : (
-                <div className="space-y-4">
-                  {hyroxboxes.map((hyroxbox) => (
-                    <HyroxBoxCard key={hyroxbox.id} hyroxbox={hyroxbox} />
-                  ))}
-                </div>
+                <>
+                  <div className="space-y-4">
+                    {hyroxboxes.map((hyroxbox) => (
+                      <HyroxBoxCard key={hyroxbox.id} hyroxbox={hyroxbox} />
+                    ))}
+                  </div>
+
+                  {/* Pagination */}
+                  <PaginationControls
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    totalItems={totalItems}
+                    itemsPerPage={ITEMS_PER_PAGE}
+                  />
+                </>
               )}
             </Suspense>
           </main>
         </div>
       </div>
-    </div>
+      </div>
+      <Footer />
+    </>
   );
 }
 
