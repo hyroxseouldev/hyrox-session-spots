@@ -5,7 +5,6 @@ import { HyroxBoxCard } from "@/components/hyroxbox-card";
 import { HyroxBoxSkeleton } from "@/components/hyroxbox-skeleton";
 import { Search, Filter } from "lucide-react";
 import { MainPageClient } from "./main-page-client";
-import { Hero } from "@/components/ui/animated-hero";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PaginationControls } from "@/components/ui/pagination-controls";

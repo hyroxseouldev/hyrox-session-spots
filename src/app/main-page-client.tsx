@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
 import { Search, X, Check } from "lucide-react";
 
@@ -23,7 +23,6 @@ export function MainPageClient({
   initialSearch,
 }: MainPageClientProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [search, setSearch] = useState(initialSearch || "");
   const [selectedRegions, setSelectedRegions] = useState<Set<number>>(
     new Set(initialRegionIds)

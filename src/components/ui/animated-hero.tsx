@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { MoveDown, MoveRight, PhoneCall } from "lucide-react";
+import { MoveDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 function Hero() {
