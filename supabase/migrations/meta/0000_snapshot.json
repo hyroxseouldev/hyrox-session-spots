@@ -1,5 +1,5 @@
 {
-  "id": "5def0a7b-a4f0-44a3-8d1c-5ee6d8bb20be",
+  "id": "652a5a1c-2324-4c57-816d-04104bda8346",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -16,15 +16,27 @@
         },
         "name": {
           "name": "name",
-          "type": "varchar(255)",
+          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "address": {
           "name": "address",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "contact_info": {
+          "name": "contact_info",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
         },
         "instagram_id": {
           "name": "instagram_id",
@@ -36,7 +48,7 @@
           "name": "price",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "features": {
           "name": "features",
@@ -54,10 +66,17 @@
           "name": "region_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
@@ -81,15 +100,7 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "hyroxbox_region_id_unique": {
-          "name": "hyroxbox_region_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "region_id"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -104,14 +115,33 @@
           "primaryKey": true,
           "notNull": true
         },
-        "region_name": {
-          "name": "region_name",
-          "type": "varchar(255)",
+        "name": {
+          "name": "name",
+          "type": "varchar(50)",
           "primaryKey": false,
           "notNull": true
         },
+        "code": {
+          "name": "code",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "created_at": {
           "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
@@ -122,11 +152,11 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "regions_region_name_unique": {
-          "name": "regions_region_name_unique",
+        "regions_code_unique": {
+          "name": "regions_code_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "region_name"
+            "code"
           ]
         }
       },
